@@ -1,0 +1,64 @@
+name: 🚀 构建发货助手APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 🐍 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: ☕ 设置Java环境
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: 📦 安装系统依赖
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+        
+    - name: 🔧 安装Python依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install buildozer cython==0.29.33
+        
+    - name: 🏗️ 构建APK
+      working-directory: ./
+      run: |
+        # 确保buildozer.spec存在
+        if [ ! -f "buildozer.spec" ]; then
+          echo "❌ buildozer.spec文件不存在"
+          exit 1
+        fi
+        
+        # 开始构建
+        echo "🚀 开始构建APK..."
+        buildozer android debug
+        
+    - name: 📱 上传APK文件
+      uses: actions/upload-artifact@v4
+      with:
+        name: 发货助手-APK
+        path: ./bin/*.apk
+        retention-days: 30
+        
+    - name: 📋 显示构建信息
+      run: |
+        echo "✅ APK构建完成！"
+        echo "📦 文件位置：./bin/"
+        ls -la ./bin/ || echo "bin目录不存在"
+        echo "📥 请在Actions页面下载APK文件"

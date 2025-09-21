@@ -23,7 +23,7 @@ version = 1.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,python-docx
+requirements = python3,kivy
 
 # (str) Supported orientation (landscape, portrait or all)
 orientation = portrait
@@ -35,16 +35,16 @@ fullscreen = 0
 android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
 # (int) Target Android API, should be as high as possible.
-android.api = 30
+android.api = 33
 
 # (int) Minimum API your APK will support.
 android.minapi = 21
 
 # (str) Android NDK version to use
-android.ndk = 23b
+android.ndk = 25b
 
 # (str) Android SDK version to use
-android.sdk = 30
+android.sdk = 33
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = False
